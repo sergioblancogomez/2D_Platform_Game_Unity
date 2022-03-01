@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class JohnMovement : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class JohnMovement : MonoBehaviour
     private bool Grounded;
     private Animator Animator;
     private float LastShoot;
-    private int Health = 5;
+    public float maxHealth;
+    public float currentHealth;
     private Animation anim;
+    public Image image;
     
     // Start is called before the first frame update
     void Start()
@@ -27,6 +30,7 @@ public class JohnMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        image.fillAmount = currentHealth / maxHealth;
         Horizontal = Input.GetAxis("Horizontal");
 
         if (Horizontal < 0.0f)
@@ -87,8 +91,8 @@ public class JohnMovement : MonoBehaviour
     public void Hit()
     {
         Camera.main.GetComponent<AudioSource>().PlayOneShot(SoundHit);
-        Health = Health - 1;
-        if(Health == 0) 
+        currentHealth = currentHealth - 1;
+        if(currentHealth == 0) 
         {
             Animator.SetBool("IsDead", true);
             Rigidbody2D.velocity = Vector2.zero;
@@ -97,7 +101,6 @@ public class JohnMovement : MonoBehaviour
     }
 
     IEnumerator Die(){
-        //play your sound
         yield return new WaitForSeconds(1); //waits 1 seconds
         Destroy(gameObject); 
     }
